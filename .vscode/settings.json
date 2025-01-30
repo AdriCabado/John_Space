@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "John_Space.sln"
+    "dotnet.defaultSolution": "John_Space.sln",
+    "dotnet.preferCSharpExtension": true
 }
