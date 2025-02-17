@@ -6,6 +6,7 @@ TagManager:
   tags:
   - John
   - Asteroid
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -14,8 +15,8 @@ TagManager:
   - Water
   - UI
   - John
+  - Bullet
   - Asteroid
-  - 
   - 
   - 
   - 
