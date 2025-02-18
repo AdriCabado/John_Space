@@ -1,113 +1,79 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    
-    public float spawnRate = 2f;
-    private float nextSpawnTime = 0f;
+    [Header("Game Timer")]
+    [Tooltip("Game duration in seconds (600 = 10 minutes)")]
+    public float gameDuration = 600f;
+    private float timer;
 
-    public float gameDuration = 600f; // 10 minutes in seconds
-    private float elapsedTime = 0f;
+    [Tooltip("UI Text to display the timer (mm:ss)")]
+    public Text timerText;
 
-    public GameObject enemyPrefab; // Add this if not already present
-    public float asteroidSpeed = 5f; // Add this if not already present
-
-    private int playerHealth;
-    private int playerScore;
-    private bool isGameOver;
+    [Header("Level & XP")]
+    public int playerLevel = 1;
+    public int maxLevel = 10;
+    [Tooltip("Slider showing XP progress")]
+    public Slider xpSlider;
+    [Tooltip("Level Up Screen GameObject (to be enabled when leveling up)")]
+    public GameObject levelUpScreen;
 
     void Start()
     {
-        StartGame();
+        timer = gameDuration;
+        if (levelUpScreen != null)
+            levelUpScreen.SetActive(false);
     }
 
     void Update()
     {
-        if (!isGameOver)
+        // Count down the game timer.
+        timer -= Time.deltaTime;
+        if (timer <= 0f)
         {
-            elapsedTime += Time.deltaTime;
-            if (elapsedTime >= gameDuration)
-            {
-                GameOver();
-            }
-            else
-            {
-                UpdateGame();
-            }
-    
-            if (Time.time >= nextSpawnTime)
-            {
-                SpawnAsteroid();
-                nextSpawnTime = Time.time + spawnRate;
-            }
+            timer = 0f;
+            EndGame();
+        }
+        UpdateTimerUI();
+
+        // (Optional) Here you could add logic to fill the XP bar over time
+        // and call OnPlayerLevelUp() when enough XP is earned.
+    }
+
+    void UpdateTimerUI()
+    {
+        if (timerText != null)
+        {
+            int minutes = Mathf.FloorToInt(timer / 60f);
+            int seconds = Mathf.FloorToInt(timer % 60f);
+            timerText.text = minutes.ToString("00") + ":" + seconds.ToString("00");
         }
     }
-    
-    void UpdateGame()
+
+    void EndGame()
     {
-        // Add your logic for updating the game here
+        Debug.Log("Game Over! Time's up.");
+        // Add game-over logic here.
     }
 
-    void StartGame()
+    /// <summary>
+    /// Call this method when the player levels up.
+    /// </summary>
+    public void OnPlayerLevelUp()
     {
-        playerHealth = 100;
-        playerScore = 0;
-        isGameOver = false;
-        elapsedTime = 0f;
-        nextSpawnTime = Time.time + spawnRate;
+        playerLevel++;
+        if (playerLevel > maxLevel)
+            playerLevel = maxLevel;
+        ShowLevelUpScreen();
     }
 
-    void SpawnAsteroid()
-{
-    Vector3 spawnPosition = CalculateSpawnPosition();
-    Debug.Log("Spawning asteroid at: " + spawnPosition);
-    GameObject asteroid = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-    asteroid.GetComponent<Rigidbody2D>().velocity = (Vector2.zero - (Vector2)asteroid.transform.position).normalized * asteroidSpeed;
-}
-
-Vector3 CalculateSpawnPosition()
-{
-    Camera mainCamera = Camera.main;
-    float cameraHeight = mainCamera.orthographicSize * 2;
-    float cameraWidth = cameraHeight * mainCamera.aspect;
-
-    float spawnX = Random.Range(-cameraWidth / 2, cameraWidth / 2);
-    float spawnY = Random.Range(-cameraHeight / 2, cameraHeight / 2);
-
-    // Ensure the spawn position is outside the camera view
-    if (Random.value > 0.5f)
+    void ShowLevelUpScreen()
     {
-        spawnX = (Random.value > 0.5f) ? spawnX + cameraWidth : spawnX - cameraWidth;
+        if (levelUpScreen != null)
+        {
+            levelUpScreen.SetActive(true);
+            // Populate the screen with upgrade options for weapons and passives.
+        }
     }
-    else
-    {
-        spawnY = (Random.value > 0.5f) ? spawnY + cameraHeight : spawnY - cameraHeight;
-    }
-
-    Vector3 spawnPosition = new Vector3(spawnX, spawnY, 0);
-    return spawnPosition;
-}
-
-public void UpdateScore(int points)
-{
-    playerScore += points;
-}
-
-public void TakeDamage(int damage)
-{
-    playerHealth -= damage;
-    if (playerHealth <= 0)
-    {
-        GameOver();
-    }
-}
-
-void GameOver()
-{
-    isGameOver = true;
-    // Handle game over logic here
-    Debug.Log("Game Over! Time's up.");
-}
 }
