@@ -1,0 +1,26 @@
+Im doing a game 2d game on unity using c# to code where im combining the classic game Asteroids with the modern genre Vampire Survivors, it will be called John Space, where John is an alien that pilots his ship (the main character). I already have the asteroid prefab and bullet prefab and John is placed on unity. I need u to make me the scripts that handle:
+
+- John have 100 hp and is going to have his hp show on screen with an style like megaman and a portrait like Kingdom Hearts on the left part of the screen.
+
+- Each  game lasts 10 minutes and the main character levels up until the weapons and pasives are all maxed up and fused
+
+- There will be 5 weapons: 
+ 1 - Laser: A laser on the front of the ship that is continuous
+ 2 - Cannon: A cannon that shoots on cooldown
+ 3 - Rocket launcher: A rocket that goes on random directions and creates an aoe explosion
+ 4 - Electric Field: An electic field that is placed around John and harms close asteroids
+ 5 - Shield: A shield that harms asteroids that touch John
+
+- There will be 5 passives, name them yourself to match the aestethic and their function:
+ 1 - This one makes the weapons bigger to hit more enemies
+ 2 - This one makes the cooldown of the weapons shorter
+ 3 - This one makes the weapons do more damage
+ 4 - This one gives a stun effect to the weapons
+ 5 - This one gives armor to John that makes him take less damage
+
+- Each weapon will fuse with his respective number passive, making a new a upgraded weapon on the weapon slot, replacing the previous weapon but maintaining the passive,
+
+- The HUD will be like Vampire Survivors, it will have an XP Bar, the weapons and passives slots, a level up screen like vampire survivors and the previous mentioned HP bar.
+
+
+
