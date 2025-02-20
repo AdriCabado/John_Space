@@ -12,9 +12,18 @@ public class CameraFollow : MonoBehaviour
     [Tooltip("Smoothing factor for the camera movement.")]
     public float smoothSpeed = 0.125f;
 
+    [Header("Clamp Settings")]
+    [Tooltip("Minimum X position for the camera.")]
+    public float minX = -701f;
+    [Tooltip("Maximum X position for the camera.")]
+    public float maxX = 705f;
+    [Tooltip("Minimum Y position for the camera.")]
+    public float minY = -398.4f;
+    [Tooltip("Maximum Y position for the camera.")]
+    public float maxY = 403;
+
     void LateUpdate()
     {
-        // Ensure we have a target assigned
         if (target == null)
             return;
 
@@ -22,6 +31,12 @@ public class CameraFollow : MonoBehaviour
         Vector3 desiredPosition = target.position + offset;
         // Smoothly interpolate between the current camera position and the desired position.
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
+
+        // Clamp the smoothed position within the defined boundaries.
+        float clampedX = Mathf.Clamp(smoothedPosition.x, minX, maxX);
+        float clampedY = Mathf.Clamp(smoothedPosition.y, minY, maxY);
+        
+        transform.position = new Vector3(clampedX, clampedY, smoothedPosition.z);
     }
 }
+
