@@ -21,8 +21,6 @@ public class CannonWeapon : Weapon
     {
         if (cooldownTimer <= 0f)
         {
-            Debug.Log("Firing Cannon!");
-
             if (bulletPrefab != null)
             {
                 // Use the firePoint if it's set; otherwise use the cannon's own transform.
@@ -31,7 +29,6 @@ public class CannonWeapon : Weapon
                 
                 // Instantiate the bullet at the specified position and rotation.
                 GameObject bullet = Instantiate(bulletPrefab, spawnPos, spawnRot);
-                Debug.Log("Bullet instantiated at position: " + spawnPos);
 
                 // Optionally, add force to the bullet's Rigidbody2D.
                 Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
@@ -39,7 +36,6 @@ public class CannonWeapon : Weapon
                 {
                     // Apply force in the direction the firePoint is facing.
                     rb.AddForce(spawnRot * Vector2.right * 500f); // Adjust the force value as needed.
-                    Debug.Log("Force applied to bullet.");
                 }
                 else
                 {
@@ -52,10 +48,6 @@ public class CannonWeapon : Weapon
             }
 
             cooldownTimer = cooldown;
-        }
-        else
-        {
-            Debug.Log("Cannon is on cooldown. Time remaining: " + cooldownTimer);
         }
     }
 

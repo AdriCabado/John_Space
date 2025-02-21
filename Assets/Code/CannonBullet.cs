@@ -15,20 +15,18 @@ public class CannonBullet : MonoBehaviour
     }
 
     // This example uses collision detection. If your bullet uses a trigger, replace with OnTriggerEnter2D.
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
+{
+    if (other.CompareTag("Asteroid"))
     {
-        // Check if the bullet hit an object tagged as "Asteroid" (or any other relevant tag)
-        if (collision.gameObject.CompareTag("Asteroid"))
+        Debug.Log("Bullet hit asteroid!");
+        AsteroidHealth asteroid = other.GetComponent<AsteroidHealth>();
+        if (asteroid != null)
         {
-            // Optionally, you can access a component on the asteroid to apply damage:
-            // Asteroid asteroid = collision.gameObject.GetComponent<Asteroid>();
-            // if (asteroid != null)
-            // {
-            //     asteroid.TakeDamage(damage);
-            // }
+            asteroid.TakeDamage(damage);
         }
-        
-        // Destroy the bullet on collision with any object.
-        Destroy(gameObject);
+
+        Destroy(gameObject); // Destroy the bullet on impact
     }
+}
 }

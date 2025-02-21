@@ -7,22 +7,23 @@ public class AsteroidHealth : MonoBehaviour
     private float currentHealth;
 
     [Header("Asteroid Death Settings")]
-    public Animator animator; // Assign the Animator in the Inspector
-    public float destroyDelay = 0.5f; // Delay before destroying the asteroid after animation
+    private Animator animator; // Automatically gets assigned in Start()
+    public float destroyDelay = 0.5f; // Delay before destruction
 
     private bool isDestroyed = false; // Prevent multiple destructions
 
     private void Start()
     {
         currentHealth = maxHealth;
+        animator = GetComponent<Animator>(); // Automatically gets the Animator component
     }
 
     public void TakeDamage(float damage)
     {
-        if (isDestroyed) return; // Ignore damage if already in destruction phase
+        if (isDestroyed) return; // Ignore further damage once destroyed
 
         currentHealth -= damage;
-        
+
         if (currentHealth <= 0)
         {
             Die();
@@ -34,13 +35,13 @@ public class AsteroidHealth : MonoBehaviour
         if (isDestroyed) return; // Ensure it only triggers once
         isDestroyed = true;
 
-        // Play destroy animation if there's an animator attached
+        // Play destroy animation if an Animator is attached
         if (animator != null)
         {
             animator.SetTrigger("Destroy");
         }
 
-        // Destroy asteroid after the animation plays
+        // Destroy the asteroid after the animation delay
         Destroy(gameObject, destroyDelay);
     }
 }
