@@ -5,7 +5,7 @@ public abstract class Weapon : MonoBehaviour
     [Header("Weapon Base Settings")]
     public WeaponType weaponType;
     [Tooltip("Optional passive fused to this weapon")]
-    public PassiveType? passiveType = null;
+    public PassiveType passiveType = PassiveType.None; // Use None instead of a nullable type.
     public float cooldown;   // Seconds between shots (if applicable)
     public float damage;
 
@@ -30,7 +30,7 @@ public abstract class Weapon : MonoBehaviour
         if (cooldownTimer <= 0f)
         {
             Debug.Log("Firing " + weaponType.ToString());
-            // Implement firing (e.g. instantiate bullets or beams)
+            // Implement firing logic (e.g., instantiate bullets or beams)
             cooldownTimer = cooldown;
         }
     }
@@ -57,4 +57,3 @@ public abstract class Weapon : MonoBehaviour
     /// </summary>
     protected abstract void UpgradeWeapon();
 }
-

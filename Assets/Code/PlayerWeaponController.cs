@@ -1,35 +1,56 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerWeaponController : MonoBehaviour
 {
-    [Header("Current Equipment")]
-    [Tooltip("Reference to the current weapon component attached to John")]
-    public Weapon currentWeapon;
-    
-    [Tooltip("Store the current passive (if any) applied to the weapon")]
-    public PassiveType? currentPassive = null;
+    [Header("Weapons System")]
+    public List<Weapon> availableWeapons = new List<Weapon>(); // List of all weapons John can use
+    private Weapon activeWeapon; // Currently active weapon
 
-    void Update()
+    private int nextWeaponUnlockLevel = 2; // Level at which new weapons start unlocking
+
+    private void Start()
     {
-        // For testing: press Space to fire the current weapon.
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Ensure the Cannon (WeaponType.Cannon) is active by default
+        foreach (Weapon weapon in availableWeapons)
         {
-            if (currentWeapon != null)
+            if (weapon.weaponType == WeaponType.Cannon)
             {
-                currentWeapon.Fire();
+                activeWeapon = weapon;
+                activeWeapon.gameObject.SetActive(true);
+            }
+            else
+            {
+                weapon.gameObject.SetActive(false); // Disable other weapons at start
             }
         }
     }
 
-    /// <summary>
-    /// Fuse the current weapon with a passive (if they match by number).
-    /// </summary>
-    public void FuseWeaponWithPassive(PassiveType passive)
+    private void Update()
     {
-        if (currentWeapon != null)
+        if (activeWeapon != null)
         {
-            currentWeapon.FusePassive(passive);
-            currentPassive = passive;
+            activeWeapon.Fire(); // Auto-fire every frame
+        }
+    }
+
+    /// <summary>
+    /// Unlocks the next available weapon if John reaches the required level.
+    /// </summary>
+    public void UnlockWeapon(int playerLevel)
+    {
+        if (playerLevel >= nextWeaponUnlockLevel)
+        {
+            foreach (Weapon weapon in availableWeapons)
+            {
+                if (!weapon.gameObject.activeSelf) // Find the first locked weapon
+                {
+                    weapon.gameObject.SetActive(true);
+                    Debug.Log("Unlocked new weapon: " + weapon.weaponType);
+                    nextWeaponUnlockLevel += 2; // Example: Unlock weapons every 2 levels
+                    break;
+                }
+            }
         }
     }
 }

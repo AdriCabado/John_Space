@@ -35,7 +35,7 @@ public class LevelUpScreenController : MonoBehaviour
         if (pwc != null)
         {
             // Example: if weapon type Laser (1), fuse with Broadbeam.
-            pwc.FuseWeaponWithPassive(PassiveType.Broadbeam);
+           
         }
         gameObject.SetActive(false);
     }
@@ -49,7 +49,6 @@ public class LevelUpScreenController : MonoBehaviour
         if (pwc != null)
         {
             // Example: if weapon type Cannon (2), fuse with Quickshot.
-            pwc.FuseWeaponWithPassive(PassiveType.Quickshot);
         }
         gameObject.SetActive(false);
     }
