@@ -41,6 +41,20 @@ public class AsteroidHealth : MonoBehaviour
             animator.SetTrigger("Destroy");
         }
 
+        // Disable the collider to prevent further collisions
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+
+        // Disable the rigidbody to stop any physics interactions
+        Rigidbody rigidbody = GetComponent<Rigidbody>();
+        if (rigidbody != null)
+        {
+            rigidbody.isKinematic = true;
+        }
+
         // Destroy the asteroid after the animation delay
         Destroy(gameObject, destroyDelay);
     }

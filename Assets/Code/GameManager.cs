@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     [Header("Game Timer")]
     [Tooltip("Game duration in seconds (600 = 10 minutes)")]
     public float gameDuration = 600f;
@@ -19,6 +21,13 @@ public class GameManager : MonoBehaviour
     [Tooltip("Level Up Screen GameObject (to be enabled when leveling up)")]
     public GameObject levelUpScreen;
 
+    void Awake()
+    {
+        if(instance != null) {
+            Destroy(this);
+        }
+        instance = this;
+    }
     void Start()
     {
         timer = gameDuration;

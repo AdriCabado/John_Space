@@ -13,7 +13,7 @@ public class CannonWeapon : Weapon
     {
         base.Start();
         weaponType = WeaponType.Cannon;
-        cooldown = 1f;  // Set your desired cooldown (seconds)
+        cooldown = 0.75f;  // Set your desired cooldown (seconds)
         damage = 20f;   // Base damage of the cannon
     }
 
@@ -27,20 +27,29 @@ public class CannonWeapon : Weapon
                 Vector3 spawnPos = (firePoint != null) ? firePoint.position : transform.position;
                 Quaternion spawnRot = (firePoint != null) ? firePoint.rotation : transform.rotation;
                 
-                // Instantiate the bullet at the specified position and rotation.
-                GameObject bullet = Instantiate(bulletPrefab, spawnPos, spawnRot);
+                GameObject bullet1 = Instantiate(bulletPrefab, spawnPos + new Vector3(-0.27f, 0f, 0f), spawnRot);
+                GameObject bullet2 = Instantiate(bulletPrefab, spawnPos + new Vector3(0.27f, 0f, 0f), spawnRot);
 
-                // Optionally, add force to the bullet's Rigidbody2D.
-                Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-                if (rb != null)
+                Rigidbody2D rb1 = bullet1.GetComponent<Rigidbody2D>();
+                if (rb1 != null)
                 {
-                    // Apply force in the direction the firePoint is facing.
-                    rb.AddForce(spawnRot * Vector2.right * 500f); // Adjust the force value as needed.
+                    rb1.AddForce(spawnRot * Vector2.right * 500f);
                 }
                 else
                 {
-                    Debug.LogWarning("Rigidbody2D component not found on bulletPrefab.");
+                    Debug.LogWarning("Rigidbody2D component not found on bulletPrefab (bullet1).");
                 }
+
+                Rigidbody2D rb2 = bullet2.GetComponent<Rigidbody2D>();
+                if (rb2 != null)
+                {
+                    rb2.AddForce(spawnRot * Vector2.right * 500f);
+                }
+                else
+                {
+                    Debug.LogWarning("Rigidbody2D component not found on bulletPrefab (bullet2).");
+                }
+                
             }
             else
             {
