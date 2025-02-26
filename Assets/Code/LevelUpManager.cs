@@ -4,7 +4,6 @@ public class LevelUpManager : MonoBehaviour
 {
     public int playerLevel = 1; // Start at level 1
     public PlayerWeaponController weaponController; // Assign in Inspector
-    public XPManager xpManager; // Assign in Inspector
 
     public void LevelUp()
     {
@@ -21,10 +20,5 @@ public class LevelUpManager : MonoBehaviour
             Debug.LogError("PlayerWeaponController not assigned in LevelUpManager!");
         }
 
-        // Reset XP after leveling up
-        if (xpManager != null)
-        {
-            xpManager.ResetXP();
-        }
     }
 }

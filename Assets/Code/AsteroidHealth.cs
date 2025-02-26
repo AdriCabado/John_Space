@@ -6,21 +6,24 @@ public class AsteroidHealth : MonoBehaviour
     public float maxHealth = 10f;
     private float currentHealth;
 
-    [Header("Asteroid Death Settings")]
-    private Animator animator; // Automatically gets assigned in Start()
-    public float destroyDelay = 0.5f; // Delay before destruction
+    [Header("XP Reward")]
+    public int xpReward = 10; // Amount of XP given when destroyed
 
-    private bool isDestroyed = false; // Prevent multiple destructions
+    [Header("Asteroid Death Settings")]
+    private Animator animator;
+    public float destroyDelay = 0.5f;
+
+    private bool isDestroyed = false;
 
     private void Start()
     {
         currentHealth = maxHealth;
-        animator = GetComponent<Animator>(); // Automatically gets the Animator component
+        animator = GetComponent<Animator>();
     }
 
     public void TakeDamage(float damage)
     {
-        if (isDestroyed) return; // Ignore further damage once destroyed
+        if (isDestroyed) return;
 
         currentHealth -= damage;
 
@@ -32,30 +35,36 @@ public class AsteroidHealth : MonoBehaviour
 
     private void Die()
     {
-        if (isDestroyed) return; // Ensure it only triggers once
+        if (isDestroyed) return;
         isDestroyed = true;
 
-        // Play destroy animation if an Animator is attached
+        // Find player and give XP
+        PlayerStats player = FindObjectOfType<PlayerStats>();
+        if (player != null)
+        {
+            player.GainXP(xpReward);
+        }
+
+        // Play destroy animation
         if (animator != null)
         {
             animator.SetTrigger("Destroy");
         }
 
-        // Disable the collider to prevent further collisions
-        Collider collider = GetComponent<Collider>();
+        // Disable physics
+        Collider2D collider = GetComponent<Collider2D>();
         if (collider != null)
         {
             collider.enabled = false;
         }
 
-        // Disable the rigidbody to stop any physics interactions
-        Rigidbody rigidbody = GetComponent<Rigidbody>();
+        Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
         if (rigidbody != null)
         {
             rigidbody.isKinematic = true;
         }
 
-        // Destroy the asteroid after the animation delay
+        // Destroy the object
         Destroy(gameObject, destroyDelay);
     }
 }
