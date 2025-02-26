@@ -48,7 +48,7 @@ public class BackgroundSpawner : MonoBehaviour
                 // If the tile doesn't exist yet, spawn it.
                 if (!spawnedTiles.ContainsKey(tileCoord))
                 {
-                    Vector3 tilePos = new Vector3(tileCoord.x * tileSize, tileCoord.y * tileSize, 10f); // z at 10 to render behind gameplay
+                    Vector3 tilePos = new Vector3(tileCoord.x * tileSize, tileCoord.y * tileSize, 0f); // z at 10 to render behind gameplay
                     GameObject tile = Instantiate(backgroundPrefab, tilePos, Quaternion.identity, transform);
                     spawnedTiles.Add(tileCoord, tile);
                 }

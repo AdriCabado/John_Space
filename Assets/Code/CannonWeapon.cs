@@ -6,15 +6,18 @@ public class CannonWeapon : Weapon
     [Tooltip("Bullet prefab to instantiate when firing.")]
     public GameObject bulletPrefab;
 
-    [Tooltip("Fire point transform where the bullet will spawn.")]
-    public Transform firePoint;
+    [Tooltip("Fire point transform for the left bullet.")]
+    public Transform firePointLeft;
+
+    [Tooltip("Fire point transform for the right bullet.")]
+    public Transform firePointRight;
 
     protected override void Start()
     {
         base.Start();
         weaponType = WeaponType.Cannon;
         cooldown = 0.75f;  // Set your desired cooldown (seconds)
-        damage = 20f;   // Base damage of the cannon
+        damage = 20f;      // Base damage of the cannon
     }
 
     public override void Fire()
@@ -23,33 +26,39 @@ public class CannonWeapon : Weapon
         {
             if (bulletPrefab != null)
             {
-                // Use the firePoint if it's set; otherwise use the cannon's own transform.
-                Vector3 spawnPos = (firePoint != null) ? firePoint.position : transform.position;
-                Quaternion spawnRot = (firePoint != null) ? firePoint.rotation : transform.rotation;
-                
-                GameObject bullet1 = Instantiate(bulletPrefab, spawnPos + new Vector3(-0.27f, 0f, 0f), spawnRot);
-                GameObject bullet2 = Instantiate(bulletPrefab, spawnPos + new Vector3(0.27f, 0f, 0f), spawnRot);
-
-                Rigidbody2D rb1 = bullet1.GetComponent<Rigidbody2D>();
-                if (rb1 != null)
+                if (firePointLeft != null && firePointRight != null)
                 {
-                    rb1.AddForce(spawnRot * Vector2.right * 500f);
+                    // Instantiate bullet at left fire point
+                    GameObject bulletLeft = Instantiate(bulletPrefab, firePointLeft.position, firePointLeft.rotation);
+                    // Instantiate bullet at right fire point
+                    GameObject bulletRight = Instantiate(bulletPrefab, firePointRight.position, firePointRight.rotation);
+
+                    // Apply force to the left bullet using the fire point's right vector.
+                    Rigidbody2D rbLeft = bulletLeft.GetComponent<Rigidbody2D>();
+                    if (rbLeft != null)
+                    {
+                        rbLeft.AddForce(firePointLeft.right * 500f);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Rigidbody2D component not found on bulletPrefab (left bullet).");
+                    }
+
+                    // Apply force to the right bullet using the fire point's right vector.
+                    Rigidbody2D rbRight = bulletRight.GetComponent<Rigidbody2D>();
+                    if (rbRight != null)
+                    {
+                        rbRight.AddForce(firePointRight.right * 500f);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Rigidbody2D component not found on bulletPrefab (right bullet).");
+                    }
                 }
                 else
                 {
-                    Debug.LogWarning("Rigidbody2D component not found on bulletPrefab (bullet1).");
+                    Debug.LogWarning("Fire point Left and/or Right are not assigned in the CannonWeapon component!");
                 }
-
-                Rigidbody2D rb2 = bullet2.GetComponent<Rigidbody2D>();
-                if (rb2 != null)
-                {
-                    rb2.AddForce(spawnRot * Vector2.right * 500f);
-                }
-                else
-                {
-                    Debug.LogWarning("Rigidbody2D component not found on bulletPrefab (bullet2).");
-                }
-                
             }
             else
             {
