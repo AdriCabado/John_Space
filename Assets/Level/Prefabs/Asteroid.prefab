@@ -190,7 +190,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab015b8ce2aa793469483b839a46a6c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  maxHealth: 6
+  xpReward: 10
   destroyDelay: 0.5
 --- !u!95 &-7797006170394421123
 Animator:

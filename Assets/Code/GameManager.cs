@@ -1,17 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
     [Header("Game Timer")]
-    [Tooltip("Game duration in seconds (600 = 10 minutes)")]
-    public float gameDuration = 600f;
+    [Tooltip("Game duration in seconds (300 = 5 minutes or 600 = 10 minutes)")]
+    public float gameDuration = 300f;
     private float timer;
+    private bool hasWon = false;
 
     [Tooltip("UI Text to display the timer (mm:ss)")]
-    public Text timerText;
+    public TextMeshProUGUI timerText;
 
     [Header("Level & XP")]
     public int playerLevel = 1;
@@ -21,33 +23,47 @@ public class GameManager : MonoBehaviour
     [Tooltip("Level Up Screen GameObject (to be enabled when leveling up)")]
     public GameObject levelUpScreen;
 
+    [Header("Win Settings")]
+    [Tooltip("John's GameObject (must have an Animator with a 'Teleport' trigger)")]
+    public GameObject john;
+    private Animator johnAnimator;
+
     void Awake()
     {
-        if(instance != null) {
+        if(instance != null)
+        {
             Destroy(this);
         }
         instance = this;
     }
+
     void Start()
     {
         timer = gameDuration;
         if (levelUpScreen != null)
             levelUpScreen.SetActive(false);
+
+        if (john != null)
+        {
+            johnAnimator = john.GetComponent<Animator>();
+        }
     }
 
     void Update()
     {
-        // Count down the game timer.
-        timer -= Time.deltaTime;
-        if (timer <= 0f)
+        if (!hasWon)
         {
-            timer = 0f;
-            EndGame();
+            timer -= Time.deltaTime;
+            if (timer <= 0f)
+            {
+                timer = 0f;
+                EndGame();
+                hasWon = true;
+            }
+            UpdateTimerUI();
         }
-        UpdateTimerUI();
 
-        // (Optional) Here you could add logic to fill the XP bar over time
-        // and call OnPlayerLevelUp() when enough XP is earned.
+        // (Optional) Add any XP bar logic here.
     }
 
     void UpdateTimerUI()
@@ -62,8 +78,13 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
-        Debug.Log("Game Over! Time's up.");
-        // Add game-over logic here.
+        Debug.Log("You win! Time's up.");
+        // Trigger John's teleport animation.
+        if (johnAnimator != null)
+        {
+            johnAnimator.SetTrigger("Teleport");
+        }
+        // Add any additional win logic here (e.g., display a win screen, disable player controls, etc.)
     }
 
     /// <summary>

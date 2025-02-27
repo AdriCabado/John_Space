@@ -15,10 +15,15 @@ public class AsteroidHealth : MonoBehaviour
 
     private bool isDestroyed = false;
 
+    private Collider2D collider2D;
+    private Rigidbody2D rigidbody2D;
+
     private void Start()
     {
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
+        collider2D = GetComponent<Collider2D>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     public void TakeDamage(float damage)
@@ -52,16 +57,14 @@ public class AsteroidHealth : MonoBehaviour
         }
 
         // Disable physics
-        Collider2D collider = GetComponent<Collider2D>();
-        if (collider != null)
+        if (collider2D != null)
         {
-            collider.enabled = false;
+            collider2D.enabled = false;
         }
 
-        Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
-        if (rigidbody != null)
+        if (rigidbody2D != null)
         {
-            rigidbody.isKinematic = true;
+            rigidbody2D.isKinematic = true;
         }
 
         // Destroy the object
