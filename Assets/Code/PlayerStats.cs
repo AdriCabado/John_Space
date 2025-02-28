@@ -10,22 +10,25 @@ public class PlayerStats : MonoBehaviour
 
     [Header("XP Settings")]
     public int currentXP = 0;
-    public int xpToNextLevel = 100; // XP required to level up
-    public int playerLevel = 1; // Starts at level 1
+    public int xpToNextLevel = 100;
+    public int playerLevel = 1;
+    public int maxLevel = 10;
 
     [Header("UI References")]
-    [Tooltip("Fill Image used for the HP bar (Mega Man style)")]
     public Image hpBarImage;
-    [Tooltip("Text component showing HP (optional)")]
     public TextMeshProUGUI hpText;
-    [Tooltip("XP bar UI element")]
     public Image xpBarImage;
-    [Tooltip("Level text UI element")]
     public TextMeshProUGUI levelText;
+    public TextMeshProUGUI levelUpMessage;
 
     [Header("Armor Modifier")]
-    [Tooltip("Multiplier for reducing incoming damage (e.g. from a Titanium passive upgrade)")]
-    public float armorModifier = 1f; // Lower value means less damage taken
+    public float armorModifier = 1f;
+
+    [Header("Weapon Unlock System")]
+    public GameObject[] weaponIcons;
+
+    private string[] weaponNames = { "Cannon", "Laser", "Rocket Launcher", "Electric Field", "Shield" };
+    private string[] passiveNames = { "Shoot speed up", "Max duration", "Bigger explosions", "Larger field distance", "Titanium armor" };
 
     void Start()
     {
@@ -34,12 +37,8 @@ public class PlayerStats : MonoBehaviour
         UpdateXPUI();
     }
 
-    /// <summary>
-    /// Call this method to subtract HP (damage) from the player.
-    /// </summary>
     public void TakeDamage(int damage)
     {
-        // Apply armor reduction (if any)
         int finalDamage = Mathf.FloorToInt(damage / armorModifier);
         currentHP -= finalDamage;
         if (currentHP < 0) currentHP = 0;
@@ -54,7 +53,6 @@ public class PlayerStats : MonoBehaviour
     void Die()
     {
         Debug.Log("John has died!");
-        // Add death or game-over logic here.
     }
 
     void UpdateHealthUI()
@@ -69,7 +67,6 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    // XP handling
     public void GainXP(int amount)
     {
         currentXP += amount;
@@ -82,18 +79,53 @@ public class PlayerStats : MonoBehaviour
 
     private void LevelUp()
     {
+        if (playerLevel >= maxLevel) return;
+        
         playerLevel++;
-        currentXP -= xpToNextLevel; // Carry over extra XP
-        xpToNextLevel = Mathf.FloorToInt(xpToNextLevel * 1.2f); // Increase next level requirement
-        Debug.Log("John leveled up! Now level " + playerLevel);
+        currentXP -= xpToNextLevel;
+        xpToNextLevel = Mathf.FloorToInt(xpToNextLevel * 1.2f);
 
-        // Update UI
         if (levelText != null)
         {
             levelText.text = "Level " + playerLevel;
         }
 
+        UnlockUpgrade(playerLevel);
         UpdateXPUI();
+    }
+
+    void UnlockUpgrade(int level)
+    {
+        if (level >= 1 && level <= 5)
+        {
+            string weaponName = weaponNames[level - 1];
+            ShowLevelUpMessage(weaponName + " Unlocked!");
+            weaponIcons[level - 1].SetActive(true);
+        }
+        else if (level >= 6 && level <= 10)
+        {
+            string passiveName = passiveNames[level - 6];
+            ShowLevelUpMessage(passiveName + " Acquired!");
+            weaponIcons[level - 6].GetComponent<Image>().color = Color.yellow;
+        }
+    }
+
+    void ShowLevelUpMessage(string message)
+    {
+        if (levelUpMessage != null)
+        {
+            levelUpMessage.text = "Level Up! " + message;
+            levelUpMessage.gameObject.SetActive(true);
+            Invoke("HideLevelUpMessage", 2f);
+        }
+    }
+
+    void HideLevelUpMessage()
+    {
+        if (levelUpMessage != null)
+        {
+            levelUpMessage.gameObject.SetActive(false);
+        }
     }
 
     void UpdateXPUI()
@@ -104,16 +136,11 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    // Collision handling with asteroids
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Asteroid"))
         {
-            int contactDamage = 10;
-            TakeDamage(contactDamage);
-            Debug.Log("John hit by asteroid! Took " + contactDamage + " damage.");
+            TakeDamage(10);
         }
     }
-
-    
 }
