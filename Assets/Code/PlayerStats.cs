@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -15,11 +17,21 @@ public class PlayerStats : MonoBehaviour
     public int maxLevel = 10;
 
     [Header("UI References")]
+    public Image johnImage;
     public Image hpBarImage;
     public TextMeshProUGUI hpText;
     public Image xpBarImage;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI levelUpMessage;
+
+     [Header("Game Over UI")]
+    [Tooltip("Game Over screen UI object (hidden by default)")]
+    public GameObject gameOverScreen;
+    [Tooltip("Game Over text component")]
+    public TextMeshProUGUI gameOverText;
+    [Tooltip("Restart button")]
+    public Button restartButton;
+
 
     [Header("Armor Modifier")]
     public float armorModifier = 1f;
@@ -53,6 +65,30 @@ public class PlayerStats : MonoBehaviour
     void Die()
     {
         Debug.Log("John has died!");
+        
+        // Freeze the game
+        Time.timeScale = 0f;
+
+        // Activate the Game Over screen
+        if (gameOverScreen != null)
+        {
+            gameOverScreen.SetActive(true);
+        }
+
+        // Ensure the restart button works
+        if (restartButton != null)
+        {
+            restartButton.onClick.RemoveAllListeners(); // Clear previous listeners
+            restartButton.onClick.AddListener(RestartGame);
+        }
+    }
+
+    void RestartGame()
+    {
+        // Unfreeze time
+        Time.timeScale = 1f;
+        // Reload current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     void UpdateHealthUI()
@@ -141,6 +177,14 @@ public class PlayerStats : MonoBehaviour
         if (collision.gameObject.CompareTag("Asteroid"))
         {
             TakeDamage(10);
+            StartCoroutine(FlashPortrait());
         }
+    }
+
+    private IEnumerator FlashPortrait()
+    {
+        johnImage.color = Color.red;
+        yield return new WaitForSeconds(1.5f);
+        johnImage.color = Color.white;
     }
 }
