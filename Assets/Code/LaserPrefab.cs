@@ -1,17 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class CannonBullet : MonoBehaviour
+public class LaserPrefab : MonoBehaviour
 {
-    [Tooltip("Time in seconds before the bullet is automatically destroyed.")]
-    public float lifetime = 5f;
+        
 
-    [Tooltip("Damage dealt by this bullet.")]
-    public float damage = 3f;
+    [Tooltip("Damage dealt by this laser.")]
+    public float damage = 10f;
 
     void Start()
     {
-        // Destroy the bullet after its lifetime expires
-        Destroy(gameObject, lifetime);
     }
 
     // This example uses collision detection. If your bullet uses a trigger, replace with OnTriggerEnter2D.
@@ -19,14 +18,12 @@ public class CannonBullet : MonoBehaviour
 {
     if (other.CompareTag("Asteroid"))
     {
-        Debug.Log("Bullet hit asteroid!");
+        Debug.Log("Laser hit asteroid!");
         AsteroidHealth asteroid = other.GetComponent<AsteroidHealth>();
         if (asteroid != null)
         {
             asteroid.TakeDamage(damage);
         }
-
-        Destroy(gameObject); // Destroy the bullet on impact
     }
 }
 }

@@ -24,7 +24,7 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI levelUpMessage;
 
-     [Header("Game Over UI")]
+    [Header("Game Over UI")]
     [Tooltip("Game Over screen UI object (hidden by default)")]
     public GameObject gameOverScreen;
     [Tooltip("Game Over text component")]
@@ -38,6 +38,8 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Weapon Unlock System")]
     public GameObject[] weaponIcons;
+
+    public GameObject[] weaponPrefabs;
 
     private string[] weaponNames = { "Cannon", "Laser", "Rocket Launcher", "Electric Field", "Shield" };
     private string[] passiveNames = { "Shoot speed up", "Max duration", "Bigger explosions", "Larger field distance", "Titanium armor" };
@@ -65,7 +67,7 @@ public class PlayerStats : MonoBehaviour
     void Die()
     {
         Debug.Log("John has died!");
-        
+
         // Freeze the game
         Time.timeScale = 0f;
 
@@ -116,7 +118,7 @@ public class PlayerStats : MonoBehaviour
     private void LevelUp()
     {
         if (playerLevel >= maxLevel) return;
-        
+
         playerLevel++;
         currentXP -= xpToNextLevel;
         xpToNextLevel = Mathf.FloorToInt(xpToNextLevel * 1.2f);
@@ -137,6 +139,7 @@ public class PlayerStats : MonoBehaviour
             string weaponName = weaponNames[level - 1];
             ShowLevelUpMessage(weaponName + " Unlocked!");
             weaponIcons[level - 1].SetActive(true);
+            weaponPrefabs[level - 1].SetActive(true);
         }
         else if (level >= 6 && level <= 10)
         {
