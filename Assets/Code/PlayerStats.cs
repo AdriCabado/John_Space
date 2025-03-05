@@ -31,6 +31,8 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI gameOverText;
     [Tooltip("Restart button")]
     public Button restartButton;
+     [Tooltip("Exit button on the Game Over screen")]
+    public Button exitButton;
 
     [Header("Armor Modifier")]
     public float armorModifier = 1f;
@@ -75,6 +77,11 @@ public class PlayerStats : MonoBehaviour
             restartButton.onClick.RemoveAllListeners();
             restartButton.onClick.AddListener(RestartGame);
         }
+        if (exitButton != null)
+        {
+            exitButton.onClick.RemoveAllListeners();
+            exitButton.onClick.AddListener(ExitGame);
+        }
     }
 
     void RestartGame()
@@ -82,7 +89,11 @@ public class PlayerStats : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
+     void ExitGame()
+    {
+        Debug.Log("Exiting game...");
+        Application.Quit();
+    }
     void UpdateHealthUI()
     {
         if (hpBarImage != null)
@@ -236,7 +247,7 @@ public class PlayerStats : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Asteroid"))
         {
-            TakeDamage(15);
+            TakeDamage(20);
             StartCoroutine(FlashPortrait());
         }
     }

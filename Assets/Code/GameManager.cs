@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI winText;
     [Tooltip("Restart button")]
     public Button restartButton;
+    [Tooltip("Exit button on the Win screen")]
+    public Button exitButton;
 
     void Awake()
     {
@@ -70,8 +72,6 @@ public class GameManager : MonoBehaviour
             }
             UpdateTimerUI();
         }
-
-        // (Optional) Add any XP bar logic here.
     }
 
     void UpdateTimerUI()
@@ -92,14 +92,15 @@ public class GameManager : MonoBehaviour
         {
             johnAnimator.SetTrigger("Teleport");
 
-            // Stop John's movement
+            // Stop John's movement.
             Rigidbody johnRigidbody = john.GetComponent<Rigidbody>();
             if (johnRigidbody != null)
             {
-            johnRigidbody.velocity = Vector3.zero;
-            johnRigidbody.angularVelocity = Vector3.zero;
+                johnRigidbody.velocity = Vector3.zero;
+                johnRigidbody.angularVelocity = Vector3.zero;
             }
-           
+
+            // Deactivate all children of John except the CameraFollowPoint.
             foreach (Transform child in john.transform)
             {
                 if (child.name != "CameraFollowPoint")
@@ -107,14 +108,13 @@ public class GameManager : MonoBehaviour
                     child.gameObject.SetActive(false);
                 }
             }
-            
         }
-        // Deactivate John object after the teleport animation
+        // Deactivate John after a short delay.
         if (john != null)
         {
-            StartCoroutine(DeactivateJohnAfterDelay(1f)); // Adjust the delay as needed to match the animation duration
+            StartCoroutine(DeactivateJohnAfterDelay(1f));
         }
-        // Start coroutine to wait before freezing the game
+        // Wait a moment before freezing the game.
         StartCoroutine(WaitAndFreezeGame(2f));
     }
 
@@ -127,28 +127,37 @@ public class GameManager : MonoBehaviour
     IEnumerator WaitAndFreezeGame(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        // Add any additional win logic here (e.g., display a win screen, disable player controls, etc.)
-        // Freeze the game
+        // Freeze the game.
         Time.timeScale = 0f;
-        // Activate the Win screen
+        // Activate the Win screen.
         if (winScreen != null)
         {
             winScreen.SetActive(true);
         }
-
-        // Ensure the restart button works
+        // Set up the restart button.
         if (restartButton != null)
         {
-            restartButton.onClick.RemoveAllListeners(); // Clear previous listeners
+            restartButton.onClick.RemoveAllListeners();
             restartButton.onClick.AddListener(RestartGame);
         }
+        // Set up the exit button.
+        if (exitButton != null)
+        {
+            exitButton.onClick.RemoveAllListeners();
+            exitButton.onClick.AddListener(ExitGame);
+        }
     }
+
     void RestartGame()
     {
-        // Unfreeze time
         Time.timeScale = 1f;
-        // Reload current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void ExitGame()
+    {
+        Debug.Log("Exiting game...");
+        Application.Quit();
     }
 
     /// <summary>

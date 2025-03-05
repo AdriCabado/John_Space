@@ -13,6 +13,8 @@ public class BackgroundMusic : MonoBehaviour
     [Tooltip("Time (in seconds) where the loop should end (e.g., 155 seconds for 2:35).")]
     public float loopEndTime = 155f;
 
+    private bool hasStarted = false;
+
     void Start()
     {
         // If no AudioSource was assigned, try to get one from this GameObject.
@@ -21,28 +23,30 @@ public class BackgroundMusic : MonoBehaviour
             audioSource = GetComponent<AudioSource>();
         }
 
-        if (audioSource != null)
-        {
-            // Set the initial playback time and start playing.
-            audioSource.time = startTime;
-            audioSource.Play();
-        }
-        else
+        if (audioSource == null)
         {
             Debug.LogWarning("BackgroundMusic: No AudioSource found!");
+            return;
         }
+
+        // Prevent music from starting immediately
+        audioSource.Stop();
     }
 
     void Update()
     {
-        // If the music is playing and we've reached or passed the loop end time...
-        if (audioSource != null && audioSource.isPlaying)
+        // Start playing the music when Time.timeScale becomes 1 (game starts)
+        if (!hasStarted && Time.timeScale == 1f)
         {
-            if (audioSource.time >= loopEndTime)
-            {
-                // Jump back to the loop start time.
-                audioSource.time = loopStartTime;
-            }
+            hasStarted = true;
+            audioSource.time = startTime;
+            audioSource.Play();
+        }
+
+        // Looping logic
+        if (hasStarted && audioSource.isPlaying && audioSource.time >= loopEndTime)
+        {
+            audioSource.time = loopStartTime;
         }
     }
 }
