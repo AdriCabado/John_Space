@@ -37,5 +37,5 @@ public class RocketPrefab : MonoBehaviour
 
         // Destroy the rocket upon collision.
         Destroy(gameObject);
-    }
+    }  
 }

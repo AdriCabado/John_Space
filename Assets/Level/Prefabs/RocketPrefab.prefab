@@ -26,23 +26,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 146624c79b8b5954ead5279d92c5454a, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 146624c79b8b5954ead5279d92c5454a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 146624c79b8b5954ead5279d92c5454a, type: 3}
       propertyPath: m_LocalScale.z
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 146624c79b8b5954ead5279d92c5454a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.9376782
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 146624c79b8b5954ead5279d92c5454a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.647359
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: 146624c79b8b5954ead5279d92c5454a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -175,4 +175,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifetime: 5
   damage: 20
-  explosionPrefab: {fileID: -2253911629886400664, guid: 01739f99f55050e409089dc5756a0935, type: 3}
+  explosionPrefab: {fileID: 0}
