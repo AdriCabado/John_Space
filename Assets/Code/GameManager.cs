@@ -72,6 +72,10 @@ public class GameManager : MonoBehaviour
             }
             UpdateTimerUI();
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ExitGame();
+        }
     }
 
     void UpdateTimerUI()
