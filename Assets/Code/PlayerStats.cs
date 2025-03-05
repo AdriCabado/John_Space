@@ -32,17 +32,15 @@ public class PlayerStats : MonoBehaviour
     [Tooltip("Restart button")]
     public Button restartButton;
 
-
     [Header("Armor Modifier")]
     public float armorModifier = 1f;
 
     [Header("Weapon Unlock System")]
     public GameObject[] weaponIcons;
-
-    public GameObject[] weaponPrefabs;
+    public GameObject[] weaponPrefabs; // Order: Cannon, Laser, Rocket, Electric Field, Shield
 
     private string[] weaponNames = { "Cannon", "Laser", "Rocket Launcher", "Electric Field", "Shield" };
-    private string[] passiveNames = { "Shoot speed up", "Max duration", "Bigger explosions", "Larger field distance", "Titanium armor" };
+    private string[] passiveNames = { "Shoot speed up", "Max duration", "Faster rockets", "Faster rotation", "Less recharge time" };
 
     void Start()
     {
@@ -67,29 +65,21 @@ public class PlayerStats : MonoBehaviour
     void Die()
     {
         Debug.Log("John has died!");
-
-        // Freeze the game
         Time.timeScale = 0f;
-
-        // Activate the Game Over screen
         if (gameOverScreen != null)
         {
             gameOverScreen.SetActive(true);
         }
-
-        // Ensure the restart button works
         if (restartButton != null)
         {
-            restartButton.onClick.RemoveAllListeners(); // Clear previous listeners
+            restartButton.onClick.RemoveAllListeners();
             restartButton.onClick.AddListener(RestartGame);
         }
     }
 
     void RestartGame()
     {
-        // Unfreeze time
         Time.timeScale = 1f;
-        // Reload current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -132,6 +122,8 @@ public class PlayerStats : MonoBehaviour
         UpdateXPUI();
     }
 
+    // Modified UnlockUpgrade: For levels 1-5 unlock base weapons,
+    // For levels 6-10, automatically upgrade the corresponding weapon's passive.
     void UnlockUpgrade(int level)
     {
         if (level >= 1 && level <= 5)
@@ -143,9 +135,73 @@ public class PlayerStats : MonoBehaviour
         }
         else if (level >= 6 && level <= 10)
         {
-            string passiveName = passiveNames[level - 6];
+            int upgradeIndex = level - 6; // Mapping: level 6 -> index 0, level 7 -> index 1, etc.
+            string passiveName = passiveNames[upgradeIndex];
             ShowLevelUpMessage(passiveName + " Acquired!");
-            weaponIcons[level - 6].GetComponent<Image>().color = Color.yellow;
+            weaponIcons[upgradeIndex].GetComponent<Image>().color = Color.yellow;
+
+            switch (level)
+            {
+                case 6:
+                    {
+                        // Upgrade CannonWeapon: reduce cooldown to 0.5f.
+                        CannonWeapon cannon = weaponPrefabs[0].GetComponent<CannonWeapon>();
+                        if (cannon != null)
+                        {
+                            cannon.cooldown = 0.5f;
+                            Debug.Log("CannonWeapon passive applied: cooldown reduced to 0.5f");
+                        }
+                        break;
+                    }
+                case 7:
+                    {
+                        // Upgrade LaserWeapon: set active duration to 3f.
+                        LaserWeapon laser = weaponPrefabs[1].GetComponent<LaserWeapon>();
+                        if (laser != null)
+                        {
+                            laser.activeDuration = 3f;
+                            Debug.Log("LaserWeapon passive applied: active duration set to 3f");
+                        }
+                        break;
+                    }
+                case 8:
+                    {
+                        // Upgrade RocketWeapon: reduce cooldown to 1f.
+                        RocketWeapon rocket = weaponPrefabs[2].GetComponent<RocketWeapon>();
+                        if (rocket != null)
+                        {
+                            rocket.cooldown = 1f;
+                            Debug.Log("RocketWeapon passive applied: cooldown reduced to 1f");
+                        }
+                        break;
+                    }
+                case 9:
+                    {
+                        // Upgrade ElectricFieldWeapon: set rotation speed to 120f.
+                        ElectricFieldWeapon electricField = weaponPrefabs[3].GetComponent<ElectricFieldWeapon>();
+                        if (electricField != null)
+                        {
+                            electricField.rotationSpeed = 120f;
+                            Debug.Log("ElectricFieldWeapon passive applied: rotation speed set to 120f");
+                        }
+                        break;
+                    }
+                case 10:
+                    {
+                        // Upgrade Shield: reduce reappearDelay to 4f.
+                        ShieldWeapon shieldWeapon = weaponPrefabs[4].GetComponent<ShieldWeapon>();
+                        if (shieldWeapon != null)
+                        {
+                            ShieldPrefab shieldPrefabScript = shieldWeapon.GetComponentInChildren<ShieldPrefab>();
+                            if (shieldPrefabScript != null)
+                            {
+                                shieldPrefabScript.reappearDelay = 4f;
+                                Debug.Log("Shield passive applied: reappearDelay reduced to 4f");
+                            }
+                        }
+                        break;
+                    }
+            }
         }
     }
 
@@ -157,6 +213,7 @@ public class PlayerStats : MonoBehaviour
             levelUpMessage.gameObject.SetActive(true);
             Invoke("HideLevelUpMessage", 2f);
         }
+        Debug.Log(message);
     }
 
     void HideLevelUpMessage()
@@ -179,7 +236,7 @@ public class PlayerStats : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Asteroid"))
         {
-            TakeDamage(10);
+            TakeDamage(15);
             StartCoroutine(FlashPortrait());
         }
     }

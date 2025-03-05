@@ -2,33 +2,36 @@ using UnityEngine;
 
 public class ShieldWeapon : Weapon
 {
+    [Header("Shield Launcher Settings")]
+    [Tooltip("Reference to the shield prefab that will be toggled on/off.")]
+    public GameObject shieldPrefab;
+
     protected override void Start()
     {
         base.Start();
         weaponType = WeaponType.Shield;
-        cooldown = 0f; // Always active
-        damage = 10f;
+        damage = 9999f; // Arbitrary high damage so that if used, it destroys asteroids instantly.
+        
+        // Activate the shield prefab (its own script will manage disappearance and reappearance)
+        if (shieldPrefab != null)
+        {
+            shieldPrefab.SetActive(true);
+        }
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        // No additional cyclic behavior here; see ShieldPrefab.cs for collision handling.
     }
 
     public override void Fire()
     {
-        // For a shield, “firing” might mean keeping it active.
-        Debug.Log("Shield active around John!");
-        // The shield might be a constantly enabled collider that damages enemies on contact.
+        // Not used because the shield's behavior is autonomous.
     }
 
     protected override void UpgradeWeapon()
     {
-        if (passiveType == PassiveType.Titanium)
-        {
-            Debug.Log("Shield upgraded with Titanium! Armor increased and reflective damage boosted.");
-            damage *= 1.5f;
-            // Optionally, find the PlayerStats component and improve armor.
-            PlayerStats stats = GetComponentInParent<PlayerStats>();
-            if (stats != null)
-            {
-                stats.armorModifier = 0.7f; // John takes less damage.
-            }
-        }
+        // Optionally upgrade properties here.
     }
 }

@@ -10,7 +10,7 @@ public class AsteroidSpawner : MonoBehaviour
     public float baseSpawnInterval = 2f;
 
     [Tooltip("Amount to reduce the spawn interval for each minute passed.")]
-    public float reductionPerMinute = 0.2f;
+    public float reductionPerMinute = 0.5f;
 
     [Tooltip("Minimum spawn interval (in seconds) allowed.")]
     public float minSpawnInterval = 0.5f;
