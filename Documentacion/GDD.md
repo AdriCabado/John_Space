@@ -16,3 +16,5 @@ A 2d game where im combining the classic game Asteroids with the modern genre Va
 - The main enemy are the asteroids that will grant XP on destruction.
 
 - Once the timer reaches 0 you win the game and John teleports out.
+
+- The AI used in the development of this game was ChatGPT and Copilot for the code and nothing else.
