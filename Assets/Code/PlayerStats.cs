@@ -122,7 +122,7 @@ public class PlayerStats : MonoBehaviour
 
         playerLevel++;
         currentXP -= xpToNextLevel;
-        xpToNextLevel = Mathf.FloorToInt(xpToNextLevel * 1.2f);
+        xpToNextLevel = Mathf.FloorToInt(xpToNextLevel * 1.3f);
 
         if (levelText != null)
         {
@@ -199,15 +199,15 @@ public class PlayerStats : MonoBehaviour
                     }
                 case 10:
                     {
-                        // Upgrade Shield: reduce reappearDelay to 4f.
+                        // Upgrade Shield: reduce reappearDelay to 5f.
                         ShieldWeapon shieldWeapon = weaponPrefabs[4].GetComponent<ShieldWeapon>();
                         if (shieldWeapon != null)
                         {
                             ShieldPrefab shieldPrefabScript = shieldWeapon.GetComponentInChildren<ShieldPrefab>();
                             if (shieldPrefabScript != null)
                             {
-                                shieldPrefabScript.reappearDelay = 4f;
-                                Debug.Log("Shield passive applied: reappearDelay reduced to 4f");
+                                shieldPrefabScript.reappearDelay = 5f;
+                                Debug.Log("Shield passive applied: reappearDelay reduced to 5f");
                             }
                         }
                         break;

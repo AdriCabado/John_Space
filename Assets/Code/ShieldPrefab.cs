@@ -7,7 +7,7 @@ public class ShieldPrefab : MonoBehaviour
     public GameObject explosionPrefab;
 
     [Tooltip("Time in seconds before the shield reappears after destroying one asteroid.")]
-    public float reappearDelay = 5f;
+    public float reappearDelay = 10f;
 
     private bool hasDestroyedAsteroid = false;
 
