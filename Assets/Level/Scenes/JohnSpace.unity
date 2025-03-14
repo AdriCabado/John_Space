@@ -3894,6 +3894,7 @@ MonoBehaviour:
   damage: 0
   rocketPrefab: {fileID: 7681893959692648290, guid: f5c0ed873be599c4d83acbb225530e36, type: 3}
   firePoint: {fileID: 1679821032}
+  rocketSpeed: 10
 --- !u!1 &1720689276
 GameObject:
   m_ObjectHideFlags: 0
@@ -4186,9 +4187,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 6488191697108322352, guid: 5ab8f65e2deb7d942a1d92d409a004dd, type: 3}
-  baseSpawnInterval: 2
-  reductionPerMinute: 0.5
-  minSpawnInterval: 0.5
+  baseSpawnInterval: 0.4
+  reductionPerMinute: 0.1
+  minSpawnInterval: 0.1
   spawnDistance: 2
   johnTransform: {fileID: 574728717}
 --- !u!4 &1768013265

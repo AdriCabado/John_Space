@@ -89,38 +89,66 @@ public class GameManager : MonoBehaviour
     }
 
     void EndGame()
+{
+    Debug.Log("You win! Time's up.");
+
+    // Trigger John's teleport animation.
+    if (johnAnimator != null)
     {
-        Debug.Log("You win! Time's up.");
-        // Trigger John's teleport animation.
-        if (johnAnimator != null)
+        johnAnimator.SetTrigger("Teleport");
+
+        // Stop John's movement.
+        Rigidbody johnRigidbody = john.GetComponent<Rigidbody>();
+        if (johnRigidbody != null)
         {
-            johnAnimator.SetTrigger("Teleport");
+            johnRigidbody.velocity = Vector3.zero;
+            johnRigidbody.angularVelocity = Vector3.zero;
+        }
 
-            // Stop John's movement.
-            Rigidbody johnRigidbody = john.GetComponent<Rigidbody>();
-            if (johnRigidbody != null)
+        // Deactivate all children of John except the CameraFollowPoint.
+        foreach (Transform child in john.transform)
+        {
+            if (child.name != "CameraFollowPoint")
             {
-                johnRigidbody.velocity = Vector3.zero;
-                johnRigidbody.angularVelocity = Vector3.zero;
-            }
-
-            // Deactivate all children of John except the CameraFollowPoint.
-            foreach (Transform child in john.transform)
-            {
-                if (child.name != "CameraFollowPoint")
-                {
-                    child.gameObject.SetActive(false);
-                }
+                child.gameObject.SetActive(false);
             }
         }
-        // Deactivate John after a short delay.
-        if (john != null)
-        {
-            StartCoroutine(DeactivateJohnAfterDelay(1f));
-        }
-        // Wait a moment before freezing the game.
-        StartCoroutine(WaitAndFreezeGame(2f));
     }
+
+    // Deactivate John after a short delay.
+    if (john != null)
+    {
+        StartCoroutine(DeactivateJohnAfterDelay(1f));
+    }
+
+    // For all asteroids, trigger their Die() method so they explode properly.
+    GameObject[] asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
+    foreach (GameObject asteroid in asteroids)
+    {
+        AsteroidHealth health = asteroid.GetComponent<AsteroidHealth>();
+        if (health != null)
+        {
+            health.Die();
+        }
+        else
+        {
+            Destroy(asteroid);
+        }
+    }
+
+    // Disable the asteroid spawner to prevent new asteroids from spawning.
+    AsteroidSpawner spawner = FindObjectOfType<AsteroidSpawner>();
+    if (spawner != null)
+    {
+        spawner.enabled = false;
+    }
+
+    // Wait a moment before freezing the game.
+    StartCoroutine(WaitAndFreezeGame(2f));
+}
+
+
+
 
     IEnumerator DeactivateJohnAfterDelay(float delay)
     {

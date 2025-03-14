@@ -6,14 +6,14 @@ public class AsteroidSpawner : MonoBehaviour
     [Tooltip("Asteroid prefab to spawn.")]
     public GameObject asteroidPrefab;
 
-     [Tooltip("Base time interval between spawns (in seconds) at the start.")]
-    public float baseSpawnInterval = 2f;
+    [Tooltip("Base time interval between spawns (in seconds) at the start.")]
+    public float baseSpawnInterval = 1f;  // Lowered from 2f for more intensity early on
 
     [Tooltip("Amount to reduce the spawn interval for each minute passed.")]
-    public float reductionPerMinute = 0.5f;
+    public float reductionPerMinute = 0.3f; // Adjusted for a smoother curve
 
     [Tooltip("Minimum spawn interval (in seconds) allowed.")]
-    public float minSpawnInterval = 0.5f;
+    public float minSpawnInterval = 0.1f;
 
     [Tooltip("Distance outside the camera bounds to spawn the asteroids.")]
     public float spawnDistance = 2f;
@@ -23,36 +23,30 @@ public class AsteroidSpawner : MonoBehaviour
     public Transform johnTransform;
 
     private Camera mainCamera;
-    private float timer;
+    private float spawnTimer;
+    private float elapsedSpawnTime = 0f;
 
-     void Start()
+    void Start()
     {
         mainCamera = Camera.main;
-        // Start with the base spawn interval.
-        timer = baseSpawnInterval;
+        spawnTimer = baseSpawnInterval;
+        elapsedSpawnTime = 0f;
     }
 
     void Update()
     {
-        timer -= Time.deltaTime;
-        if (timer <= 0f)
+        float dt = Time.deltaTime;
+        elapsedSpawnTime += dt;
+        spawnTimer -= dt;
+        if (spawnTimer <= 0f)
         {
             SpawnAsteroid();
 
-            // Calculate how many minutes have elapsed.
-            // Assuming the game run lasts 5 minutes (300 seconds).
-            float elapsedTime = (300f - GameManager.instance.gameDuration + (300f - timer)); 
-            // Alternatively, if you have a central timer, you can use that.
-            // For this example, we'll compute elapsed time as (baseDuration - timerElapsed)
-            // Let's assume you don't have an external timer, so we'll simulate:
-            float elapsedMinutes = (300f - timer) / 60f;  // This is a rough estimate
-
-            // For a more robust solution, consider referencing your GameManager's elapsed time.
-
-            // Calculate current spawn interval: 
-            // current interval = base interval - (minutesPassed * reductionPerMinute)
+            // Calculate elapsed minutes since spawner started.
+            float elapsedMinutes = elapsedSpawnTime / 60f;
+            // Calculate the current spawn interval.
             float currentSpawnInterval = Mathf.Max(minSpawnInterval, baseSpawnInterval - reductionPerMinute * elapsedMinutes);
-            timer = currentSpawnInterval;
+            spawnTimer = currentSpawnInterval;
         }
     }
 
@@ -63,7 +57,7 @@ public class AsteroidSpawner : MonoBehaviour
         float camHeight = 2f * mainCamera.orthographicSize;
         float camWidth = camHeight * mainCamera.aspect;
         Vector3 spawnPos = Vector3.zero;
-
+        
         // Randomly choose one of four sides: 0 = top, 1 = bottom, 2 = left, 3 = right.
         int side = Random.Range(0, 4);
         switch (side)
@@ -94,7 +88,7 @@ public class AsteroidSpawner : MonoBehaviour
                 break;
         }
 
-         // Instantiate the asteroid and set its movement target.
+        // Instantiate the asteroid.
         GameObject asteroid = Instantiate(asteroidPrefab, spawnPos, Quaternion.identity);
         AsteroidMovement movement = asteroid.GetComponent<AsteroidMovement>();
         if (movement != null && johnTransform != null)

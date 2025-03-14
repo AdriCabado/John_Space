@@ -42,7 +42,7 @@ public class PlayerStats : MonoBehaviour
     public GameObject[] weaponPrefabs; // Order: Cannon, Laser, Rocket, Electric Field, Shield
 
     private string[] weaponNames = { "Cannon", "Laser", "Rocket Launcher", "Electric Field", "Shield" };
-    private string[] passiveNames = { "Shoot speed up", "Max duration", "Faster rockets", "Faster rotation", "Less recharge time" };
+    private string[] passiveNames = { "Cannon shoot speed up", "Laser max duration up", "More rockets", "Faster electric field rotation", "Less shield recharge time" };
 
     void Start()
     {
@@ -122,7 +122,7 @@ public class PlayerStats : MonoBehaviour
 
         playerLevel++;
         currentXP -= xpToNextLevel;
-        xpToNextLevel = Mathf.FloorToInt(xpToNextLevel * 1.3f);
+        xpToNextLevel = Mathf.FloorToInt(xpToNextLevel * 1.4f);
 
         if (levelText != null)
         {

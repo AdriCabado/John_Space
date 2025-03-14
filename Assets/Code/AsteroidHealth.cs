@@ -38,7 +38,7 @@ public class AsteroidHealth : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
         if (isDestroyed) return;
         isDestroyed = true;
