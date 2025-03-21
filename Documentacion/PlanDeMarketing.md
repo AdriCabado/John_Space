@@ -1,7 +1,7 @@
 # Plan de Marketing – *John Space: 5 Minutes Adventure*
 
 **Objetivo Principal (KPI):**  
-El número de visitas del juego en itch.io.
+Aumentar el número de visitas del juego en itch.io.
 
 ---
 
