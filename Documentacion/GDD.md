@@ -1,11 +1,11 @@
 # GDD
 
-### Resumen del juego
+## Resumen del juego
 
-## Concepto
+### Concepto
 Un juego en 2D donde combino el clásico juego Asteroids con Vampire Survivors, el protagonista se llama John Space y pilota una nave.
 
-## Jugabilidad
+### Jugabilidad
 
 - Controles de la nave estilo Asteroids.
 
@@ -30,11 +30,11 @@ Un juego en 2D donde combino el clásico juego Asteroids con Vampire Survivors, 
 
 - La IA utilizada en el desarrollo de este juego fue ChatGPT y Copilot para el código y nada más.
 
-## Arte
+### Arte
 Estilo 2D pixelart.
 
-## Musica
+### Musica
 Musica de fondo durante la partida estilo retro espacial.
 
-## Información Técnica
+### Información Técnica
 Se puede jugar en itch.io o descargar para Windows desde la misma página desde donde lo juegas.
