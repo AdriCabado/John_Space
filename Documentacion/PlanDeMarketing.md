@@ -27,7 +27,12 @@ Aumentar el número de visitas del juego en itch.io.
 ## Posibles Acciones Adicionales  
 - Subir un trailer corto a YouTube.
 
-## Publicaciones que haré:
-//rellenar despues
+## Publicaciones que haré en redes (21/03/2025):
 
+En español:
 
+chavalada, como trabajo de clase he publicado en http://itch.io/ mi primer videojuego (si es que se puede llamar así), si tenéis 5 minutos libres (que es lo que dura vamos) echadle un tiento porfas ✌ https://ardain.itch.io/john-space-5-minutes-adventure #unity #unity2d #madewithunity #gamedev
+
+En ingles:
+
+folks, for a class assignment I’ve published my first video game on http://itch.io/ (if you can even call it that). If you’ve got 5 minutes to spare (that’s literally how long it lasts), give it a shot pls✌ https://ardain.itch.io/john-space-5-minutes-adventure #unity #unity2d #madewithunity #gamedev
