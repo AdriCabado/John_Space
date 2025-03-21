@@ -25,7 +25,7 @@ Aumentar el número de visitas del juego en itch.io.
 ---
 
 ## Posibles Acciones Adicionales  
-- Subir un trailer corto a YouTube mostrando el gameplay.
+- Subir un trailer corto a YouTube.
 
 ## Publicaciones:
 
