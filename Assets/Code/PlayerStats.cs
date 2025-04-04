@@ -6,6 +6,8 @@ using System.Collections;
 
 public class PlayerStats : MonoBehaviour
 {
+    private bool canRestart = false;
+
     [Header("Health Settings")]
     public int maxHP = 100;
     [HideInInspector] public int currentHP;
@@ -82,8 +84,21 @@ public class PlayerStats : MonoBehaviour
             exitButton.onClick.RemoveAllListeners();
             exitButton.onClick.AddListener(ExitGame);
         }
+
+          canRestart = true; // Allow restart via gamepad input
     }
 
+    void Update()
+{
+    if (canRestart)
+    {
+        // Check for gamepad input (pressing any movement stick or "Submit" button)
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0 ||  Input.GetButtonDown("Submit") || Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
+        {
+            RestartGame();
+        }
+    }
+}
     void RestartGame()
     {
         Time.timeScale = 1f;
